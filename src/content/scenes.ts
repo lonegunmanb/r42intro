@@ -18,7 +18,7 @@ export type Scene = {
 export type ReportKey = 'chokepoint' | 'secjury'
 
 export const reports: Record<ReportKey, { label: string; eyebrow: string; path: string; imagePath: string }> = {
-  chokepoint: { label: '产业链', eyebrow: 'CHOKEPOINT', path: `${import.meta.env.BASE_URL}reports/chokepoint/report.md`, imagePath: `${import.meta.env.BASE_URL}reports/chokepoint/overview.png` },
+  chokepoint: { label: '产业链', eyebrow: 'CHOKEPOINT', path: `${import.meta.env.BASE_URL}reports/chokepoint/report.md`, imagePath: `${import.meta.env.BASE_URL}images/chokepoint-infographic.png` },
   secjury: { label: '估值质询', eyebrow: 'SECJURY', path: `${import.meta.env.BASE_URL}reports/secjury/report.md`, imagePath: `${import.meta.env.BASE_URL}reports/secjury/overview.png` },
 }
 
@@ -46,13 +46,12 @@ export const scenes: Scene[] = [
   { id: 'runtime', number: 21, title: '看一次 r42 运行', kicker: '现场演示', minutes: 1, kind: 'transition', section: 'research', summary: '现场展示启动和运行界面；完整报告已经提前生成。', statement: '运行很慢，但研究产物可以被反复阅读、检查和追问。', accent: 'blue', tags: ['运行', '报告'] },
   { id: 'chokepoint', number: 22, title: '产业链：定位公司', kicker: '案例 / 公司发现', minutes: 4, kind: 'case', section: 'research', summary: '从人形机器人产业链的关键节点，寻找值得下一轮核查的公司。', statement: '研究优先级不是股票评级；“未证明”也不是“没有风险”。', accent: 'coral', tags: ['人形机器人', 'A 股', '节点'], reportKey: 'chokepoint' },
   { id: 'chokepoint-workflow', number: 23, title: '产业链研究工厂：从材料到报告', kicker: '案例 / 研究流程', minutes: 2, kind: 'case', section: 'research', summary: '先建立官方来源基线、确定产品范围，再并行整理五条证据线，形成参考供应链图。', statement: '供应连续性风险和上市公司线索分别核查，最后汇成可追溯的公司优先研究报告。', accent: 'coral', tags: ['五条证据线', '独立核查', '可追溯报告'] },
-  { id: 'chokepoint-infographic', number: 24, title: '人形机器人产业链研究信息图', kicker: '案例 / 报告摘要', minutes: 2, kind: 'case', section: 'research', summary: '承接上一页的研究流程，这张信息图汇总一次研究的公司优先级、证据状态和下一步观察点。', statement: 'A/B/C 表示继续研究的优先级，不是股票评级或投资建议。', accent: 'coral', tags: ['研究优先级', '证据状态', '关键观察'] },
-  { id: 'secjury-intro', number: 25, title: 'SECJURY：给估值安排一场质询', kicker: '方法 / 研究型估值审查', minutes: 2, kind: 'concept', section: 'research', summary: 'SECJURY 把一次证券研究拆成可追溯的证据、可复算的估值模型和多种投资视角的独立质询。', statement: '它不是荐股器，也不是把陪审员票数当成真理；它的任务是找出结论依赖了哪些假设，以及哪些地方还不能下判断。', accent: 'amber', tags: ['证据', 'DCF', '多视角质询', '不确定性'], reportKey: 'secjury' },
-  { id: 'secjury-process', number: 26, title: 'SECJURY：从身份核验到评审报告', kicker: '方法 / 一条封闭的研究流水线', minutes: 2, kind: 'concept', section: 'research', summary: '先确认研究对象，再登记和整理证据；模型冻结后交给不同角色反向检查，最后把数字、质疑和证据缺口合成报告。', statement: '研究阶段可以提出不同意见，但不能悄悄改掉输入；每个结论都要能回到材料、计算或明确标注的假设。', accent: 'amber', tags: ['身份', '材料', '归一化', '建模', '质询', '交付'], reportKey: 'secjury' },
-  { id: 'secjury-process-infographic', number: 27, title: 'SECJURY 研究流程信息图', kicker: '方法 / 研究流程总览', minutes: 2, kind: 'concept', section: 'research', summary: '把 SECJURY 从身份核验、证据收集到估值质询和报告交付的完整链路放在一张图里。', statement: '每一步都留下可追溯的材料、计算和质疑，发现缺口就回到证据层补查。', accent: 'amber', tags: ['研究流程', '证据', '估值', '质询', '报告'] },
-  { id: 'report-interpretation', number: 28, title: '让研究报告更容易被理解', kicker: '方法 / 降低复杂报告的理解门槛', minutes: 2, kind: 'concept', section: 'research', summary: '多 Agent 协作常常会产出结构复杂、信息密度很高的报告。除了继续压缩文字，也可以把同一份材料转换成更容易进入的问答、视频和播客。', statement: '先让读者听懂、看懂、问得到，再回到原报告核对证据和细节。', accent: 'violet', tags: ['多媒体', '问答机器人', '视频', '播客'] },
-  { id: 'research-scope', number: 29, title: '研究仍然只是一次摸象', kicker: '结语 / 从更多洞见到更完整的理解', minutes: 2, kind: 'concept', section: 'research', summary: '以上只是众多研究尝试中的一部分。智能体可以快速帮助人类阅读海量开放数据，把洞见转成更容易理解的形式，但这仍处在初级探索阶段。', statement: '研究得更多，不等于买股票一定赚钱；我们仍是摸象的盲人，只是比以前多摸到了一些部位。', accent: 'coral', tags: ['开放数据', '初级探索', '数据缺口', '不保证收益', '不完整'] },
-  { id: 'qa', number: 30, title: '问答', kicker: '回到研究地图', minutes: 5, kind: 'qa', section: 'close', summary: '从任一概念或报告继续展开。', statement: '问题从哪里开始，镜头就回到哪里。', accent: 'blue', tags: ['Q&A'] },
+  { id: 'secjury-intro', number: 24, title: 'SECJURY：给估值安排一场质询', kicker: '方法 / 研究型估值审查', minutes: 2, kind: 'concept', section: 'research', summary: 'SECJURY 把一次证券研究拆成可追溯的证据、可复算的估值模型和多种投资视角的独立质询。', statement: '它不是荐股器，也不是把陪审员票数当成真理；它的任务是找出结论依赖了哪些假设，以及哪些地方还不能下判断。', accent: 'amber', tags: ['证据', 'DCF', '多视角质询', '不确定性'], reportKey: 'secjury' },
+  { id: 'secjury-process', number: 25, title: 'SECJURY：从身份核验到评审报告', kicker: '方法 / 一条封闭的研究流水线', minutes: 2, kind: 'concept', section: 'research', summary: '先确认研究对象，再登记和整理证据；模型冻结后交给不同角色反向检查，最后把数字、质疑和证据缺口合成报告。', statement: '研究阶段可以提出不同意见，但不能悄悄改掉输入；每个结论都要能回到材料、计算或明确标注的假设。', accent: 'amber', tags: ['身份', '材料', '归一化', '建模', '质询', '交付'], reportKey: 'secjury' },
+  { id: 'secjury-process-infographic', number: 26, title: 'SECJURY 研究流程信息图', kicker: '方法 / 研究流程总览', minutes: 2, kind: 'concept', section: 'research', summary: '把 SECJURY 从身份核验、证据收集到估值质询和报告交付的完整链路放在一张图里。', statement: '每一步都留下可追溯的材料、计算和质疑，发现缺口就回到证据层补查。', accent: 'amber', tags: ['研究流程', '证据', '估值', '质询', '报告'] },
+  { id: 'report-interpretation', number: 27, title: '让研究报告更容易被理解', kicker: '方法 / 降低复杂报告的理解门槛', minutes: 2, kind: 'concept', section: 'research', summary: '多 Agent 协作常常会产出结构复杂、信息密度很高的报告。除了继续压缩文字，也可以把同一份材料转换成更容易进入的问答、视频和播客。', statement: '先让读者听懂、看懂、问得到，再回到原报告核对证据和细节。', accent: 'violet', tags: ['多媒体', '问答机器人', '视频', '播客'] },
+  { id: 'research-scope', number: 28, title: '研究仍然只是一次摸象', kicker: '结语 / 从更多洞见到更完整的理解', minutes: 2, kind: 'concept', section: 'research', summary: '以上只是众多研究尝试中的一部分。智能体可以快速帮助人类阅读海量开放数据，把洞见转成更容易理解的形式，但这仍处在初级探索阶段。', statement: '研究得更多，不等于买股票一定赚钱；我们仍是摸象的盲人，只是比以前多摸到了一些部位。', accent: 'coral', tags: ['开放数据', '初级探索', '数据缺口', '不保证收益', '不完整'] },
+  { id: 'qa', number: 29, title: '问答', kicker: '回到研究地图', minutes: 5, kind: 'qa', section: 'close', summary: '从任一概念或报告继续展开。', statement: '问题从哪里开始，镜头就回到哪里。', accent: 'blue', tags: ['Q&A'] },
 ]
 
 export const sectionLabels = {
