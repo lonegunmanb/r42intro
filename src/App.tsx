@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm'
 import { reports, scenes, sectionLabels, type ReportKey, type Scene } from './content/scenes'
 
 type Camera = { x: number; y: number; zoom: number }
-type ExpandableScene = 'agent-comic' | 'worlds' | 'static-research-comic' | 'tool-context-budget-comic' | 'chokepoint-workflow' | 'chokepoint-infographic' | 'secjury-process-infographic'
+type ExpandableScene = 'agent-comic' | 'worlds' | 'static-research-comic' | 'tool-context-budget-comic' | 'context-compression-infographic' | 'chokepoint-workflow' | 'chokepoint-infographic' | 'secjury-process-infographic'
 
 const sceneCameras: Record<string, Camera> = {
   opening: { x: .24, y: .43, zoom: 1.08 },
@@ -14,6 +14,7 @@ const sceneCameras: Record<string, Camera> = {
   'finance-risk': { x: .25, y: .8, zoom: 1.9 },
   'context-window': { x: .32, y: .64, zoom: 1.95 },
   'context-compression': { x: .34, y: .64, zoom: 1.95 },
+  'context-compression-infographic': { x: .5, y: .5, zoom: 1 },
   'prompt-stack': { x: .3, y: .53, zoom: 1.95 },
   'research-crew': { x: .34, y: .57, zoom: 1.9 },
   agent: { x: .37, y: .55, zoom: 1.85 },
@@ -42,11 +43,11 @@ const sceneCameras: Record<string, Camera> = {
 const landmarks = [
   { label: '入港与风险', index: 0, x: 15, y: 51 },
   { label: '语言工坊', index: 1, x: 29, y: 55 },
-  { label: 'Agent 与 Harness', index: 8, x: 37, y: 64 },
-  { label: '开放研究', index: 10, x: 26, y: 34 },
-  { label: '过滤船闸', index: 14, x: 48, y: 69 },
-  { label: '机器人街区', index: 20, x: 88, y: 77 },
-  { label: '估值质询', index: 23, x: 74, y: 44 },
+  { label: 'Agent 与 Harness', index: 9, x: 37, y: 64 },
+  { label: '开放研究', index: 11, x: 26, y: 34 },
+  { label: '过滤船闸', index: 15, x: 48, y: 69 },
+  { label: '机器人街区', index: 21, x: 88, y: 77 },
+  { label: '估值质询', index: 24, x: 74, y: 44 },
 ]
 
 const atlasImage = `${import.meta.env.BASE_URL}images/research-atlas.png`
@@ -54,6 +55,7 @@ const agentComicImage = `${import.meta.env.BASE_URL}images/page-10-agent-comic.p
 const contextRotImage = `${import.meta.env.BASE_URL}images/page-15-context-rot.png`
 const staticResearchImage = `${import.meta.env.BASE_URL}images/page-17-static-research.png`
 const toolContextBudgetImage = `${import.meta.env.BASE_URL}images/tool-context-budget-comic.png`
+const contextCompressionImage = `${import.meta.env.BASE_URL}images/context-compression-infographic.png`
 const chokepointWorkflowImage = `${import.meta.env.BASE_URL}images/chokepoint-workflow.png`
 const chokepointInfographicImage = `${import.meta.env.BASE_URL}images/chokepoint-infographic.png`
 const secjuryProcessImage = `${import.meta.env.BASE_URL}images/secjury-process-infographic.png`
@@ -62,6 +64,7 @@ const expandedImageDetails: Record<ExpandableScene, { src: string; label: string
   worlds: { src: contextRotImage, label: '上下文退化四格漫画', alt: '四格漫画：上下文短时研究顺利，资料堆积后关键线索被淹没，目标与推理开始不稳定' },
   'static-research-comic': { src: staticResearchImage, label: 'static_research 四阶段插画', alt: '四个机器人工作站分别负责资料收集、材料质检、封闭研究和可选的成果质检；封闭研究仅使用已有材料并标注证据缺口' },
   'tool-context-budget-comic': { src: toolContextBudgetImage, label: '工具上下文预算漫画', alt: '四格太阳朋克漫画：工具、MCP 和 Skill 过多会挤占 Agent 的工作上下文；r42 按任务声明加载刚刚够用的能力' },
+  'context-compression-infographic': { src: contextCompressionImage, label: '上下文压缩信息图', alt: '上下文压缩信息图：压缩前上下文容量接近上限，经过压缩后容量恢复，但原始信息中的限定条件和来源关系可能被简化' },
   'chokepoint-workflow': { src: chokepointWorkflowImage, label: '产业链研究工厂流程图', alt: '研究工厂：官方来源基线和产品范围进入五条并行证据线，构成参考供应链图；供应连续性风险与上市公司线索分别核查，最终形成可追溯报告' },
   'chokepoint-infographic': { src: chokepointInfographicImage, label: '产业链研究信息图', alt: '人形机器人产业链研究信息图，汇总 A/B/C 研究优先级、供应交付状态、公司线索和关键观察点；证据截至 2026 年 10 月 22 日' },
   'secjury-process-infographic': { src: secjuryProcessImage, label: 'SECJURY 研究流程信息图', alt: 'SECJURY 研究流程信息图：从确认证券、收集证据、归一化财务数据、构建 DCF 估值、多视角质询到汇总研究报告' },
@@ -165,7 +168,7 @@ function App() {
       <section className="stage" aria-live="polite">
         <SceneMap activeIndex={activeIndex} onTransitionChange={setIsTransitioning} />
         <div className={`scene-counter ${active.id === 'chokepoint-workflow' || active.id === 'chokepoint-infographic' || active.id === 'secjury-process-infographic' ? 'scene-counter-hidden' : ''}`}><span>{String(active.number).padStart(2, '0')}</span><i />{scenes.length}</div>
-        <article className={`scene ${active.id === 'opening' ? 'opening-scene' : ''} ${active.id === 'model' || active.id === 'finance-risk' || active.id === 'context-window' || active.id === 'research-crew' || active.id === 'worlds' ? 'image-scene' : ''} ${active.id === 'research-crew' || active.id === 'gemini' || active.id === 'sources' || active.id === 'single-agent' || active.id === 'r42-boundary' ? 'dense-scene' : ''} ${active.id === 'gemini' ? 'gemini-scene' : ''} ${active.id === 'sources' ? 'sources-scene' : ''} ${active.id === 'single-agent' ? 'single-agent-scene' : ''} ${active.id === 'worlds' ? 'worlds-scene' : ''} ${active.id === 'r42-boundary' ? 'r42-workflow-scene' : ''} ${active.id === 'chokepoint' ? 'case-flow-scene' : ''} ${active.id.startsWith('secjury-') && active.id !== 'secjury-process-infographic' ? 'secjury-scene' : ''} ${active.id === 'agent-comic' || active.id === 'static-research-comic' || active.id === 'tool-context-budget-comic' ? 'comic-scene' : ''} ${active.id === 'chokepoint-workflow' || active.id === 'chokepoint-infographic' || active.id === 'secjury-process-infographic' ? 'image-slide-scene' : ''} ${isTransitioning ? 'scene-hidden' : ''}`} key={active.id} aria-label={`第 ${active.number} 页：${active.title}`}>
+        <article className={`scene ${active.id === 'opening' ? 'opening-scene' : ''} ${active.id === 'model' || active.id === 'finance-risk' || active.id === 'context-window' || active.id === 'research-crew' || active.id === 'worlds' ? 'image-scene' : ''} ${active.id === 'research-crew' || active.id === 'gemini' || active.id === 'sources' || active.id === 'single-agent' || active.id === 'r42-boundary' ? 'dense-scene' : ''} ${active.id === 'gemini' ? 'gemini-scene' : ''} ${active.id === 'sources' ? 'sources-scene' : ''} ${active.id === 'single-agent' ? 'single-agent-scene' : ''} ${active.id === 'worlds' ? 'worlds-scene' : ''} ${active.id === 'r42-boundary' ? 'r42-workflow-scene' : ''} ${active.id === 'chokepoint' ? 'case-flow-scene' : ''} ${active.id.startsWith('secjury-') && active.id !== 'secjury-process-infographic' ? 'secjury-scene' : ''} ${active.id === 'agent-comic' || active.id === 'static-research-comic' || active.id === 'tool-context-budget-comic' ? 'comic-scene' : ''} ${active.id === 'context-compression-infographic' || active.id === 'chokepoint-workflow' || active.id === 'chokepoint-infographic' || active.id === 'secjury-process-infographic' ? 'image-slide-scene' : ''} ${isTransitioning ? 'scene-hidden' : ''}`} key={active.id} aria-label={`第 ${active.number} 页：${active.title}`}>
           <div className="scene-copy">
             <p className="kicker"><span className="kicker-dot" />{active.kicker}</p>
             <h1>{active.title}</h1>
@@ -185,7 +188,7 @@ function App() {
             {active.id === 'runtime' && <div className="runtime-card"><Clock3 size={16} /><span>现场展示 r42 终端；完整报告提前生成。</span><em>LIVE DEMO</em></div>}
             {active.reportKey && <button className="report-button" onClick={() => setReportOpen(active.reportKey!)}><BookOpen size={16} />打开{reports[active.reportKey].label}</button>}
           </div>
-          <div className={`scene-art ${active.id === 'model' ? 'model-art' : ''} ${active.id === 'finance-risk' ? 'finance-risk-art' : ''} ${active.id === 'context-window' ? 'context-window-art' : ''} ${active.id === 'research-crew' ? 'agent-components-art' : ''}`}><SceneVisual scene={active} />{(active.id === 'agent-comic' || active.id === 'worlds' || active.id === 'static-research-comic' || active.id === 'tool-context-budget-comic' || active.id === 'chokepoint-workflow' || active.id === 'chokepoint-infographic' || active.id === 'secjury-process-infographic') && <button className="comic-expand icon-button" onClick={() => setExpandedImage(active.id as ExpandableScene)} aria-label={`放大查看${expandedImageDetails[active.id as ExpandableScene].label}`} title={`放大查看${expandedImageDetails[active.id as ExpandableScene].label}`}><Maximize2 size={18} /></button>}</div>
+          <div className={`scene-art ${active.id === 'model' ? 'model-art' : ''} ${active.id === 'finance-risk' ? 'finance-risk-art' : ''} ${active.id === 'context-window' ? 'context-window-art' : ''} ${active.id === 'research-crew' ? 'agent-components-art' : ''}`}><SceneVisual scene={active} />{(active.id === 'agent-comic' || active.id === 'worlds' || active.id === 'static-research-comic' || active.id === 'tool-context-budget-comic' || active.id === 'context-compression-infographic' || active.id === 'chokepoint-workflow' || active.id === 'chokepoint-infographic' || active.id === 'secjury-process-infographic') && <button className="comic-expand icon-button" onClick={() => setExpandedImage(active.id as ExpandableScene)} aria-label={`放大查看${expandedImageDetails[active.id as ExpandableScene].label}`} title={`放大查看${expandedImageDetails[active.id as ExpandableScene].label}`}><Maximize2 size={18} /></button>}</div>
         </article>
       </section>
 
@@ -203,7 +206,7 @@ function App() {
 
       {showMap && <MapOverlay active={active} onClose={() => setShowMap(false)} onSelect={(index) => { setShowMap(false); goTo(index) }} />}
       {reportOpen && <ReportViewer reportKey={reportOpen} onClose={() => setReportOpen(null)} />}
-      {expandedImage && <div className={`overlay comic-overlay ${expandedImage === 'chokepoint-workflow' || expandedImage === 'chokepoint-infographic' ? 'infographic-overlay' : ''}`} role="dialog" aria-modal="true" aria-label={expandedImageDetails[expandedImage].label}>
+      {expandedImage && <div className={`overlay comic-overlay ${expandedImage === 'context-compression-infographic' || expandedImage === 'chokepoint-workflow' || expandedImage === 'chokepoint-infographic' ? 'infographic-overlay' : ''}`} role="dialog" aria-modal="true" aria-label={expandedImageDetails[expandedImage].label}>
         <button className="close-button comic-close" onClick={() => setExpandedImage(null)} aria-label="关闭大图"><X size={20} /></button>
         <div className="comic-zoom-scroll"><img src={expandedImageDetails[expandedImage].src} alt={expandedImageDetails[expandedImage].alt} /></div>
       </div>}
@@ -282,6 +285,7 @@ function SceneVisual({ scene }: { scene: Scene }) {
   </div>
   if (scene.id === 'context-window') return <div className="model-visual model-visual-image"><img className="model-image" src={`${import.meta.env.BASE_URL}images/context-window.png`} alt="机器人吞入报告、搜索结果和对话记录后吃撑，预计和投产后等关键条件掉出" /></div>
   if (scene.id === 'context-compression') return <div className="compression-visual"><div className="compression-source"><b>原始上下文</b><span>完整规则 · 例外条件 · 来源链接 · 用户任务</span></div><div className="compression-arrow">压缩成更短的摘要 ↓</div><div className="compression-summary"><b>压缩摘要</b><span>保留大意，但可能漏掉限定词、数字条件和来源关系</span></div><div className="compression-loss"><span>预计</span><span>仅限投产后</span><span>来源：年报第 18 页</span></div></div>
+  if (scene.id === 'context-compression-infographic') return <img className="context-compression-slide-image" src={contextCompressionImage} alt="上下文压缩信息图：压缩前上下文容量接近上限，经过压缩后容量恢复，但原始信息中的限定条件和来源关系可能被简化" />
   if (scene.id === 'prompt-stack') return <div className="prompt-stack-visual"><div><b>系统提示词 = 工作制度</b><span>长期规定：研究员要遵守什么规则，哪些事不能做。</span></div><div><b>用户提示词 = 任务单</b><span>这一次要研究什么问题，要交付什么结果。</span></div><div><b>工具 = 手边动作</b><span>搜索、读文件、运行代码、计算数字。</span></div><div><b>MCP = 外部连接</b><span>把数据库、服务或应用接到工具台上。</span></div><div><b>Skill = 操作手册</b><span>完成一类工作时可以反复使用的方法和步骤。</span></div></div>
   if (scene.id === 'research-crew') return <div className="model-visual model-visual-image agent-components-visual"><img className="model-image agent-components-image" src={`${import.meta.env.BASE_URL}images/page-08-agent-components.png`} alt="研究 Agent 工作台示意图，展示系统提示词、用户提示词、工具、MCP 和 Skill 五种组件" /></div>
   if (scene.id === 'agent') return <div className="agent-visual">
