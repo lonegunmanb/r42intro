@@ -1,0 +1,11 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process?.env ?? {}
+const repository = env.GITHUB_REPOSITORY?.split('/')[1]
+const isUserPage = repository?.endsWith('.github.io')
+
+export default defineConfig({
+  base: repository && !isUserPage ? `/${repository}/` : '/',
+  plugins: [react()],
+})
